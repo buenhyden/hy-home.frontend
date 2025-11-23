@@ -1,33 +1,23 @@
-/* 1. Tailwind CSS 지시어 (필수) */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* 2. 전역 스타일 설정 (선택 사항) */
-/* 기본 배경색과 글자색을 설정하여 페이지 로드 시 깜빡임 방지 */
 @layer base {
   body {
     @apply bg-slate-950 text-slate-200 antialiased;
   }
 }
 
-/* 3. 커스텀 유틸리티 클래스 */
-/* VideoPortfolio.jsx의 카테고리 필터바에서 사용된 스크롤바 숨김 클래스 */
 @layer utilities {
-
-  /* Chrome, Safari, Opera */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
 
   .no-scrollbar {
-    /* IE and Edge */
     -ms-overflow-style: none;
-    /* Firefox */
     scrollbar-width: none;
   }
 
-  /* 텍스트 드래그 방지 (UI 요소용) */
   .no-select {
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -36,8 +26,6 @@
   }
 }
 
-/* 4. 애니메이션 키프레임 (필요 시 추가) */
-/* 모달 등장 애니메이션 등 Tailwind Config 외의 복잡한 애니메이션 정의 */
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -58,7 +46,6 @@
   }
 }
 
-/* animate-in 클래스와 함께 사용될 때 동작하도록 보조 */
 .animate-in {
   animation-duration: 200ms;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
