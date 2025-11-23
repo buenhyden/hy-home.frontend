@@ -14,3 +14,11 @@ The React Compiler is currently not compatible with SWC. See [this issue](https:
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+## 2️⃣ Git 설정
+
+일관된 커밋 메시지 작성을 위해 템플릿을 설정합니다:
+
+```bash
+git config commit.template .gitmessage
+```
