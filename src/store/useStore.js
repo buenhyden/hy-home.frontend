@@ -6,24 +6,24 @@ export const useStore = create((set, get) => ({
   user: null,
   token: null,
   isAuthenticated: false,
-  
+
   // Portfolio State
   videos: [],
   isLoading: false,
   error: null,
-  
+
   // Actions
   setVideos: (videos) => set({ videos }),
-  
+
   login: async (username, password) => {
     try {
       set({ isLoading: true, error: null });
       const data = await apiService.login(username, password);
-      set({ 
-        token: data.access_token, 
-        user: { username }, 
-        isAuthenticated: true, 
-        isLoading: false 
+      set({
+        token: data.access_token,
+        user: { username },
+        isAuthenticated: true,
+        isLoading: false,
       });
       return true;
     } catch (err) {
@@ -31,15 +31,15 @@ export const useStore = create((set, get) => ({
       return false;
     }
   },
-  
+
   logout: () => set({ user: null, token: null, isAuthenticated: false }),
-  
+
   fetchVideos: async () => {
     try {
       set({ isLoading: true });
       const videos = await apiService.fetchVideos();
       set({ videos, isLoading: false });
-    } catch (err) {
+    } catch {
       set({ error: 'Failed to fetch videos', isLoading: false });
     }
   },
@@ -52,7 +52,7 @@ export const useStore = create((set, get) => ({
       set({ videos: [newVideo, ...videos] });
     } catch (err) {
       console.error(err);
-      alert("Failed to add video");
+      alert('Failed to add video');
     }
   },
 
@@ -61,10 +61,10 @@ export const useStore = create((set, get) => ({
     if (!token) return;
     try {
       await apiService.deleteVideo(id, token);
-      set({ videos: videos.filter(v => v.id !== id) });
+      set({ videos: videos.filter((v) => v.id !== id) });
     } catch (err) {
       console.error(err);
-      alert("Failed to delete video");
+      alert('Failed to delete video');
     }
-  }
+  },
 }));

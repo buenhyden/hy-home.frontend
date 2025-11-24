@@ -1,31 +1,20 @@
-x-default-logging: &logging
-  driver: 'json-file'
-  options:
-    max-size: '5m'
-    max-file: '2'
- 
 services:
-  default-reactjs:
+  frontend:
     build:
       context: .
       dockerfile: Dockerfile
-      target: dev
-    image: javascript.reactjs:latest
-    hostname: reactjs
-    container_name: reactjs
-    restart: unless-stopped
-    working_dir: /app
-    expose:
-      - ${DEFAULT_REACTJS_PORT}
-      - ${DEFAULT_VITE_PORT}
+    image: ${REGISTRY:-ghcr.io}/${IMAGE_NAME:-buenhyden/hy-home.frontend}:${IMAGE_TAG:-latest}
+    container_name: hy-home-frontend
+    restart: always
     ports:
-      - ${DEFAULT_REACTJS_HOST_PORT}:${DEFAULT_REACTJS_PORT}
-      - ${DEFAULT_VITE_HOST_PORT}:${DEFAULT_VITE_PORT}
-    networks:
-      - project_net
-      - infra_net
-    stdin_open: true #docker run -i
-    tty: true #docker run -t
+      - '${PORT:-3000}:80'
     volumes:
-      - reactjs-volume:/app:rw      
-    logging: *logging
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+    networks:
+      - app_net
+
+networks:
+  app_net:
+    driver: bridge
