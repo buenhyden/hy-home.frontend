@@ -7,7 +7,7 @@ export const apiService = {
       const formData = new URLSearchParams();
       formData.append('username', username);
       formData.append('password', password);
-      const res = await fetch(`${CONFIG.API_URL}/token`, {
+      const res = await fetch(`${CONFIG.API_URL}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: formData,
@@ -17,9 +17,14 @@ export const apiService = {
     } else {
       // Mock Login
       if (username === 'admin' && password === '1234') {
-        return Promise.resolve({ access_token: 'mock_jwt_token_xyz', token_type: 'bearer' });
+        return Promise.resolve({
+          access_token: 'mock_jwt_token_xyz',
+          token_type: 'bearer',
+        });
       }
-      return Promise.reject(new Error('Invalid credentials (Try: admin / 1234)'));
+      return Promise.reject(
+        new Error('Invalid credentials (Try: admin / 1234)')
+      );
     }
   },
 
@@ -35,9 +40,9 @@ export const apiService = {
     if (CONFIG.USE_REAL_API) {
       const res = await fetch(`${CONFIG.API_URL}/videos`, {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(video),
       });
@@ -50,10 +55,10 @@ export const apiService = {
     if (CONFIG.USE_REAL_API) {
       await fetch(`${CONFIG.API_URL}/videos/${id}`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` },
       });
       return true;
     }
     return Promise.resolve(true);
-  }
+  },
 };
