@@ -1,42 +1,25 @@
 export const MOCK_VIDEOS = [
-  { 
-    id: 1, 
-    title: '2024 브랜드 필름', 
-    category: 'Commercial', 
-    thumbnail: '[https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=80](https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=80)', 
-    url: '#', 
-    description: '브랜드 아이덴티티를 표현한 시네마틱 광고 영상입니다.' 
+  {
+    id: 101,
+    title: 'Smart City Vision (Demo)',
+    category: 'Commercial',
+    thumbnail:
+      'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&q=80',
+    url: 'https://www.youtube.com/watch?v=ysz5S6PUM-U',
+    description: '서버 연결이 되지 않아 표시되는 예시 데이터입니다.',
+    analysis_status: 'completed',
+    ai_summary:
+      '이 영상은 스마트 시티의 미래 비전을 제시합니다.\n\n1. AI 기반 교통 관리\n2. 친환경 에너지 솔루션\n3. 디지털 트윈 기술 활용',
   },
-  { 
-    id: 2, 
-    title: '모션 그래픽 쇼릴', 
-    category: 'Motion Graphics', 
-    thumbnail: '[https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&q=80](https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&q=80)', 
-    url: '#', 
-    description: 'After Effects를 활용한 2023-2024 모션 그래픽 모음집입니다.' 
-  },
-  { 
-    id: 3, 
-    title: '단편 영화: "Echo"', 
-    category: 'Film', 
-    thumbnail: '[https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&q=80](https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&q=80)', 
-    url: '#', 
-    description: '독립 영화제 출품작. 고독과 연결에 대한 이야기를 다룹니다.' 
-  },
-  { 
-    id: 4, 
-    title: 'Tech Conference Intro', 
-    category: 'Event', 
-    thumbnail: '[https://images.unsplash.com/photo-1505373877841-8d43f703f8ca?w=800&q=80](https://images.unsplash.com/photo-1505373877841-8d43f703f8ca?w=800&q=80)', 
-    url: '#', 
-    description: '글로벌 테크 컨퍼런스의 오프닝 타이틀 시퀀스입니다.' 
-  },
-  { 
-    id: 5, 
-    title: 'Music Video: "Night"', 
-    category: 'Music Video', 
-    thumbnail: '[https://images.unsplash.com/photo-1514525253440-b39345208668?w=800&q=80](https://images.unsplash.com/photo-1514525253440-b39345208668?w=800&q=80)', 
-    url: '#', 
-    description: '인디 밴드의 감성적인 밤거리를 담은 뮤직비디오.' 
+  {
+    id: 102,
+    title: 'Neural Network Art',
+    category: 'Motion Graphics',
+    thumbnail:
+      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80',
+    url: 'https://www.youtube.com/watch?v=aircAruvnKk',
+    description: 'Generative AI를 활용한 모션 그래픽 실험작.',
+    analysis_status: 'processing',
+    ai_summary: null,
   },
 ];

@@ -1,89 +1,88 @@
 import { create } from 'zustand';
-import { createJSONStorage, persist } from 'zustand/middleware'; // 미들웨어 import
+import { createJSONStorage, persist } from 'zustand/middleware';
 import { apiService } from '../services/api';
 
 export const useStore = create(
   persist(
     (set, get) => ({
-      // Auth State
       user: null,
       token: null,
       isAuthenticated: false,
-
-      // Portfolio State
       videos: [],
       isLoading: false,
-      error: null,
+      toast: { show: false, message: '', type: 'info' },
 
-      // Actions
-      setVideos: (videos) => set({ videos }),
+      showToast: (message, type = 'info') => {
+        set({ toast: { show: true, message, type } });
+        setTimeout(
+          () => set((state) => ({ toast: { ...state.toast, show: false } })),
+          3000
+        );
+      },
 
       login: async (username, password) => {
         try {
-          set({ isLoading: true, error: null });
           const data = await apiService.login(username, password);
           set({
             token: data.access_token,
             user: { username },
             isAuthenticated: true,
-            isLoading: false,
           });
+          get().showToast(`환영합니다, ${username}님!`, 'success');
           return true;
         } catch (err) {
-          set({ error: err.message, isLoading: false });
+          get().showToast(err.message, 'error');
           return false;
         }
       },
-      // 로그아웃 시 로컬 스토리지 데이터도 함께 초기화됨
+
       logout: () => {
         set({ user: null, token: null, isAuthenticated: false });
-        // 선택사항: 로그아웃 시 비디오 목록도 비우려면 아래 주석 해제
-        // set({ videos: [] });
+        get().showToast('로그아웃 되었습니다.', 'info');
       },
 
       fetchVideos: async () => {
+        set({ isLoading: true });
         try {
-          set({ isLoading: true });
           const videos = await apiService.fetchVideos();
-          set({ videos, isLoading: false });
+          set({ videos: videos.sort((a, b) => b.id - a.id), isLoading: false });
         } catch (err) {
-          set({ error: err.message, isLoading: false });
+          console.error(err);
+          set({ isLoading: false });
         }
       },
 
       addVideo: async (videoData) => {
-        const { token, videos } = get();
-        if (!token) return;
+        const { token, showToast } = get();
         try {
-          const newVideo = await apiService.addVideo(videoData, token);
-          set({ videos: [newVideo, ...videos] });
+          await apiService.addVideo(videoData, token);
+          showToast('프로젝트가 등록되고 분석이 시작되었습니다.', 'success');
+          get().fetchVideos();
         } catch (err) {
           console.error(err);
-          alert('Failed to add video');
+          showToast('등록에 실패했습니다 (서버 연결 확인 필요).', 'error');
         }
       },
 
       deleteVideo: async (id) => {
-        const { token, videos } = get();
-        if (!token) return;
+        const { token, videos, showToast } = get();
         try {
           await apiService.deleteVideo(id, token);
           set({ videos: videos.filter((v) => v.id !== id) });
+          showToast('프로젝트가 삭제되었습니다.', 'success');
         } catch (err) {
           console.error(err);
-          alert('Failed to delete video');
+          showToast('삭제에 실패했습니다.', 'error');
         }
       },
     }),
     {
-      name: 'portfolio-storage', // 로컬 스토리지에 저장될 키 이름
-      storage: createJSONStorage(() => localStorage), // 저장소 설정 (기본값: localStorage)
-      // 저장할 상태만 선별 (로딩 상태나 에러는 저장하지 않음)
+      name: 'portfolio-storage',
+      storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         user: state.user,
         token: state.token,
         isAuthenticated: state.isAuthenticated,
-        videos: state.videos, // 비디오 목록도 캐싱하여 UX 향상
       }),
     }
   )

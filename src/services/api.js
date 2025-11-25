@@ -3,7 +3,7 @@ import { MOCK_VIDEOS } from '../data/mockVideos';
 
 export const apiService = {
   login: async (username, password) => {
-    if (CONFIG.USE_REAL_API) {
+    try {
       const formData = new URLSearchParams();
       formData.append('username', username);
       formData.append('password', password);
@@ -12,53 +12,47 @@ export const apiService = {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: formData,
       });
-      if (!res.ok) throw new Error('Login failed');
-      return res.json(); // returns { access_token, token_type }
-    } else {
-      // Mock Login
-      if (username === 'admin' && password === '1234') {
-        return Promise.resolve({
-          access_token: 'mock_jwt_token_xyz',
-          token_type: 'bearer',
-        });
+      if (!res.ok) throw new Error('로그인 실패: 아이디/비번을 확인하세요');
+      return res.json();
+    } catch (error) {
+      console.warn('Login failed (backend unreachable?)', error);
+      if (username === 'admin' && password === 'password') {
+        return { access_token: 'demo_token', token_type: 'bearer' };
       }
-      return Promise.reject(
-        new Error('Invalid credentials (Try: admin / 1234)')
-      );
+      throw error;
     }
   },
 
   fetchVideos: async () => {
-    if (CONFIG.USE_REAL_API) {
-      const res = await fetch(`${CONFIG.API_URL}/videos`);
+    try {
+      const res = await fetch(`${CONFIG.API_URL}/videos/`);
+      if (!res.ok) throw new Error('영상 목록 로딩 실패');
       return res.json();
+    } catch (error) {
+      console.warn('백엔드 연결 실패. Mock 데이터를 사용합니다.', error);
+      return MOCK_VIDEOS;
     }
-    return Promise.resolve(MOCK_VIDEOS);
   },
 
   addVideo: async (video, token) => {
-    if (CONFIG.USE_REAL_API) {
-      const res = await fetch(`${CONFIG.API_URL}/videos`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(video),
-      });
-      return res.json();
-    }
-    return Promise.resolve({ ...video, id: Date.now() });
+    const res = await fetch(`${CONFIG.API_URL}/videos/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(video),
+    });
+    if (!res.ok) throw new Error('업로드 실패');
+    return res.json();
   },
 
   deleteVideo: async (id, token) => {
-    if (CONFIG.USE_REAL_API) {
-      await fetch(`${CONFIG.API_URL}/videos/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      return true;
-    }
-    return Promise.resolve(true);
+    const res = await fetch(`${CONFIG.API_URL}/videos/${id}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) throw new Error('삭제 실패');
+    return true;
   },
 };
