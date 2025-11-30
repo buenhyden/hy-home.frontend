@@ -75,6 +75,22 @@ export const useStore = create(
           showToast('삭제에 실패했습니다.', 'error');
         }
       },
+      retryAnalysis: async (id) => {
+        const { token, showToast, videos } = get();
+        try {
+          await apiService.retryAnalysis(id, token);
+          // 즉시 UI 상태 업데이트 (낙관적 업데이트)
+          set({
+            videos: videos.map((v) =>
+              v.id === id ? { ...v, analysis_status: 'queued' } : v
+            ),
+          });
+          showToast('재분석 요청이 대기열에 등록되었습니다.', 'success');
+        } catch (err) {
+          console.error(err);
+          showToast('재분석 요청 실패', 'error');
+        }
+      },
     }),
     {
       name: 'portfolio-storage',

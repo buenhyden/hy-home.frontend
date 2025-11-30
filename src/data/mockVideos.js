@@ -22,4 +22,15 @@ export const MOCK_VIDEOS = [
     analysis_status: 'processing',
     ai_summary: null,
   },
+  {
+    id: 103,
+    title: 'Neural Network Art',
+    category: 'Motion Graphics',
+    thumbnail:
+      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80',
+    url: 'https://www.youtube.com/watch?v=aircAruvnKk',
+    description: 'Generative AI를 활용한 모션 그래픽 실험작.',
+    analysis_status: 'failed',
+    ai_summary: null,
+  },
 ];

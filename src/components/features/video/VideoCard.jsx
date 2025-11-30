@@ -3,11 +3,19 @@ import {
   FileText,
   Loader2,
   Play,
+  RefreshCw,
   Sparkles,
   Trash2,
 } from 'lucide-react';
 
-const VideoCard = ({ video, isAdmin, onDelete, onPlay, onShowSummary }) => {
+const VideoCard = ({
+  video,
+  isAdmin,
+  onDelete,
+  onPlay,
+  onShowSummary,
+  onRetry,
+}) => {
   const statusConfig = {
     pending: {
       color: 'bg-slate-700 text-slate-300',
@@ -84,6 +92,16 @@ const VideoCard = ({ video, isAdmin, onDelete, onPlay, onShowSummary }) => {
           </div>
 
           <div className="flex items-center gap-2">
+            {isAdmin && video.analysis_status === 'failed' && (
+              <button
+                onClick={() => onRetry(video.id)}
+                className="p-2 text-slate-400 hover:text-yellow-400 hover:bg-yellow-500/10 rounded-lg transition-colors"
+                title="분석 재시도"
+              >
+                <RefreshCw size={18} />
+              </button>
+            )}
+
             {video.analysis_status === 'completed' && (
               <button
                 onClick={() => onShowSummary(video)}

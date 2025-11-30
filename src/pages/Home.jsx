@@ -20,6 +20,7 @@ export default function Home() {
     deleteVideo,
     addVideo,
     isLoading,
+    retryAnalysis,
   } = useStore();
 
   const [search, setSearch] = useState('');
@@ -211,6 +212,7 @@ export default function Home() {
                 onDelete={deleteVideo}
                 onPlay={setActiveVideo}
                 onShowSummary={setSummaryVideo}
+                onRetry={retryAnalysis}
               />
             ))}
           </div>

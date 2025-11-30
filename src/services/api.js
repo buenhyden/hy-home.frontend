@@ -55,4 +55,12 @@ export const apiService = {
     if (!res.ok) throw new Error('삭제 실패');
     return true;
   },
+  retryAnalysis: async (id, token) => {
+    const res = await fetch(`${CONFIG.API_URL}/videos/${id}/analyze`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) throw new Error('재분석 요청 실패');
+    return res.json();
+  },
 };
